@@ -6,7 +6,7 @@ use argon2::{
 use anyhow::Result;
 
 
-pub fn hash_password(password : String)-> Result<String, argon2::password_hash::Error>{
+pub fn hash_password(password : &str)-> Result<String, argon2::password_hash::Error>{
     let salt = SaltString::generate(OsRng);
     let argon2 = Argon2::default();
 
