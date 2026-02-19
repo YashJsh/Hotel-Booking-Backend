@@ -89,7 +89,7 @@ pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> imp
     let user = match check_user {
         Ok(Some(user)) => user,
         Ok(None) => {
-            return HttpResponse::Ok().json(APIResponse::<()>::error("USER_NOT_FOUND"));
+            return HttpResponse::NotFound().json(APIResponse::<()>::error("USER_NOT_FOUND"));
         }
         Err(_) => {
             return HttpResponse::InternalServerError()
@@ -101,7 +101,7 @@ pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> imp
     let verify = verify_password(&body.password, &user.password).unwrap();
 
     if !verify {
-        return HttpResponse::Ok().json(APIResponse::<()>::error("Wrong Password"));
+        return HttpResponse::Unauthorized().json(APIResponse::<()>::error("Wrong Password"));
     };
 
     //Creating token

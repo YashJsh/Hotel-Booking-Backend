@@ -4,6 +4,7 @@ mod db;
 mod handlers;
 mod models;
 mod utils;
+mod middleware;
 
 use handlers::auth_handler::signup;
 
