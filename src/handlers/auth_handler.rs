@@ -73,6 +73,7 @@ pub async fn signup(data: web::Json<CreateUser>, pool: web::Data<PgPool>) -> imp
 pub struct User {
     id: String,
     password: String,
+    role : String
 }
 
 #[post("/auth/signin")]
@@ -80,7 +81,7 @@ pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> imp
     let body = data.0;
     let check_user = sqlx::query_as!(
         User,
-        "SELECT id, password FROM users WHERE email = $1",
+        "SELECT id, password, role FROM users WHERE email = $1",
         body.email
     )
     .fetch_optional(pool.get_ref())
@@ -105,7 +106,7 @@ pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> imp
     };
 
     //Creating token
-    let token = create_token(&user.id);
+    let token = create_token(&user.id, &user.role);
 
     return HttpResponse::Ok().json(APIResponse::success(token));
 }
