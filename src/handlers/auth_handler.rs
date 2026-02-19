@@ -1,7 +1,12 @@
 use actix_web::{HttpResponse, Responder, post, web};
+use serde::{Deserialize, Serialize};
+use sqlx::prelude::FromRow;
 
 use crate::models::user::{CreateUser, Role, SignInUser, SignUpResponse};
-use crate::utils::{api_response::APIResponse, password::hash_password};
+use crate::utils::password::verify_password;
+use crate::utils::{
+    api_response::APIResponse, password::hash_password, token_managment::create_token,
+};
 
 use sqlx::PgPool;
 
@@ -64,14 +69,24 @@ pub async fn signup(data: web::Json<CreateUser>, pool: web::Data<PgPool>) -> imp
     }
 }
 
+#[derive(Deserialize, Serialize, FromRow)]
+pub struct User {
+    id: String,
+    password: String,
+}
+
 #[post("/auth/signin")]
 pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> impl Responder {
     let body = data.0;
-    let check_user = sqlx::query!("SELECT id FROM users WHERE email = $1", body.email)
-        .fetch_optional(pool.get_ref())
-        .await;
+    let check_user = sqlx::query_as!(
+        User,
+        "SELECT id, password FROM users WHERE email = $1",
+        body.email
+    )
+    .fetch_optional(pool.get_ref())
+    .await;
 
-    let _user = match check_user {
+    let user = match check_user {
         Ok(Some(user)) => user,
         Ok(None) => {
             return HttpResponse::Ok().json(APIResponse::<()>::error("USER_NOT_FOUND"));
@@ -81,5 +96,16 @@ pub async fn signin(data: web::Json<SignInUser>, pool: web::Data<PgPool>) -> imp
                 .json(APIResponse::<()>::error("DATABASE_ERROR"));
         }
     };
-    return HttpResponse::Ok().json(APIResponse::<()>::error("USER_NOT_FOUND"));
+
+    //Matching the password;
+    let verify = verify_password(&body.password, &user.password).unwrap();
+
+    if !verify {
+        return HttpResponse::Ok().json(APIResponse::<()>::error("Wrong Password"));
+    };
+
+    //Creating token
+    let token = create_token(&user.id);
+
+    return HttpResponse::Ok().json(APIResponse::success(token));
 }

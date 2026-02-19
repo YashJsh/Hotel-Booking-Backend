@@ -14,3 +14,5 @@ tokio = { version = "1.49.0", features =["full"]}
 validator = { version = "0.16", features = ["derive"] }
 argon2 = { version = "0.5", features = ["password-hash"] }
 rand_core = "0.6"
+jwt = "0.16.0"
+jsonwebtoken = "10.3.0"
