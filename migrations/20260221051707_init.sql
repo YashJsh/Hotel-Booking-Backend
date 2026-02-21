@@ -1,3 +1,5 @@
+-- Add migration script here
+
 CREATE TABLE users (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -15,7 +17,7 @@ CREATE TABLE hotels (
     description TEXT,
     city VARCHAR(100) NOT NULL,
     country VARCHAR(100) NOT NULL,
-    amenities JSONB DEFAULT '[]',
+    amenities TEXT[] DEFAULT '{}',
     rating DECIMAL(2,1) DEFAULT 0.0,
     total_reviews INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
