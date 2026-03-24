@@ -1,0 +1,75 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO hotels (owner_id, name, description, city, country, amenities)\n        VALUES ($1, $2, $3, $4, $5, $6)\n        RETURNING \n            id, \n            owner_id as \"owner_id!\", \n            name, \n            description, \n            city, \n            country, \n            amenities as \"amenities!\", \n            rating as \"rating!\", \n            total_reviews as \"total_reviews!\"\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "owner_id!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "city",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "country",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "amenities!",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 7,
+        "name": "rating!",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "total_reviews!",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Text",
+        "Varchar",
+        "Varchar",
+        "TextArray"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "8dd362e530424800b35844d42a892c8408d0ea6b0757e20025be550c135f1894"
+}

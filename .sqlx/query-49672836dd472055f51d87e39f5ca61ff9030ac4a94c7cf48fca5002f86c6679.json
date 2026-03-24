@@ -1,0 +1,56 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO rooms (hotel_id, room_number, room_type, price_per_night, max_occupancy) Values($1, $2, $3, $4, $5)\n        RETURNING \n        id,\n        hotel_id,\n        room_number,\n        room_type,\n        price_per_night,\n        max_occupancy",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "hotel_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "room_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "room_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "price_per_night",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 5,
+        "name": "max_occupancy",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Numeric",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "49672836dd472055f51d87e39f5ca61ff9030ac4a94c7cf48fca5002f86c6679"
+}

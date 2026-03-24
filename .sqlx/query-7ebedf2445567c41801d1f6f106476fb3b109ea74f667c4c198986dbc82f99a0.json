@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "Select room_number from rooms where hotel_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "room_number",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "7ebedf2445567c41801d1f6f106476fb3b109ea74f667c4c198986dbc82f99a0"
+}

@@ -1,6 +1,5 @@
 use actix_web::{
-    HttpMessage, HttpRequest, HttpResponse, Responder, post,
-    web::{self},
+    HttpMessage, HttpRequest, HttpResponse, Responder, get, post, web::{self}
 };
 use serde::{Deserialize, Serialize};
 
@@ -25,6 +24,7 @@ pub struct Hotel {
     total_reviews: Option<i32>,
 }
 
+//Create hotel route;
 #[post("/api/hotels")]
 pub async fn create_hotel(
     data: web::Json<CreateHotel>,
@@ -77,6 +77,7 @@ pub async fn create_hotel(
         }
     }
 }
+
 
 #[derive(FromRow)]
 struct HotelOwner {
@@ -178,4 +179,15 @@ pub async fn create_rooms(
         Ok(data) => return HttpResponse::Ok().json(APIResponse::success(data)),
         Err(_)=> return HttpResponse::InternalServerError().json(APIResponse::<()>::error("Error in creating room"))
     }
+}
+
+#[get("/api/hotels")]
+pub async fn get_hotel(req : HttpRequest)-> impl Responder{
+    let extensions = req.extensions();
+    let authuser = match extensions.get::<AuthUser>(){
+        Some(user) => user,
+        None => return HttpResponse::Unauthorized().json(APIResponse::<()>::error("UNAUTHORIZED")),
+    };
+    
+    HttpResponse::Ok().json("Hello")
 }
